@@ -1,0 +1,35 @@
+{
+  "name": "rectle-docker-middleware",
+  "version": "0.0.1",
+  "description": "Rectle Docker Middleware",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Rectle/rectle-docker-middleware.git"
+  },
+  "author": "Rectle",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rectle/rectle-docker-middleware/issues"
+  },
+  "homepage": "https://github.com/Rectle/rectle-docker-middleware#readme",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "crypto-js": "^4.1.1",
+    "public-ip": "^6.0.1",
+    "socket.io": "^4.6.2",
+    "socket.io-client": "^4.6.2",
+    "uuid": "^9.0.0"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.7",
+    "utf-8-validate": "^5.0.10"
+  },
+  "devDependencies": {
+    "localtunnel": "^2.0.2"
+  }
+}

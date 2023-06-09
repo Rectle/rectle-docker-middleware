@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  controller:
+    build: .
+    ports:
+      - 3000
