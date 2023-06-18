@@ -1,10 +1,12 @@
 import axios from "axios"
-import { validate as uuidValidate } from 'uuid';
 import store from "../store/index.js"
+import { getRoom, buildValidate } from "./helpers/build.js"
 
-const getRoom = socket => socket.handshake.headers["x-build"]
 
-const run = async (io) => {
+// TODO: Move to env
+const SERVER_URL = 'https://rectle-service-wxvnwxzk5a-lm.a.run.app/api/v1/compilations'
+
+const run = async (io, runnerUrl) => {
     console.info("Secret namespace starting...")
     const { secret: SECRET } = await axios.get("http://localhost:8080/").then(res => res.data)
     const nsp = io.of("/private")
@@ -17,7 +19,9 @@ const run = async (io) => {
                 next(err)
             }
     
-            if  (!uuidValidate(getRoom(socket))) {
+            const room = getRoom(socket)
+
+            if (!buildValidate(room)) {
                 const err = Error("Access denied")
                 err.data = "Invalid or missing build id."
                 next(err)
@@ -32,19 +36,30 @@ const run = async (io) => {
             socket.join(room)
             store.builds[room] = { logs: [] }
 
-            console.log(room, socket)
+            // axios.put(`${SERVER_URL}/runner`, {
+            //     url: runnerUrl
+            // })
         })
 
         socket.on("build:log", log => {
             const room = getRoom(socket)
+
             store.builds[room]?.logs?.push(log)
+
+            io.of("/").to(room).emit("build:log", log)
         })
 
         socket.on("build:finish", () => {
             const room = getRoom(socket)
 
             socket.leave(room)
+            
+            // axios.put(`${SERVER_URL}/logs`, {
+            //     logs: store.builds[room].logs
+            // })
+
             delete store.builds[room]
+            io.of("/").to(room).emit("build:finish")
         })
 
         socket.on("disconnect", reason => {

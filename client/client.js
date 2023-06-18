@@ -1,19 +1,22 @@
 import axios from "axios";
 import io from "socket.io-client"
 
-const SECRET = await axios.get("http://localhost:8080").then(({ data }) => data.secret)
-
-console.log(SECRET)
-
-const socket = io("ws://localhost:3000/private", {
+const socket = io("ws://localhost:3000/", {
   reconnectionDelayMax: 10000,
   extraHeaders: {
-    'X-Build': '6ec0bd7f-11c0-43da-975e-2a8ad9ebae0b',
-    'X-Token': SECRET
+    'X-Build': 14
   }
 });
 
-socket.emit("build:start")
+socket.emit("build:join")
+
+socket.on("build:logs", logs => {
+  console.log(logs)
+})
+
+socket.on("build:log", logs => {
+  console.log(logs)
+})
 
 socket.on("connect_error", err => {
     console.log(err)

@@ -1,6 +1,5 @@
-import { validate as uuidValidate } from 'uuid';
-
-const getRoom = socket => socket.handshake.headers["x-build"]
+import store from "../store/index.js"
+import { buildValidate, getRoom } from "./helpers/build.js"
 
 const run = (io) => {
     console.info("Public namespace starting...")
@@ -8,7 +7,9 @@ const run = (io) => {
 
     nsp.on("connection", socket => {
         socket.use((event, next) => {
-            if  (!uuidValidate(getRoom(socket))) {
+            const room = getRoom(socket)
+
+            if (!buildValidate(room)) {
                 const err = Error("Access denied")
                 err.data = "Invalid or missing build id."
                 next(err)
@@ -16,6 +17,15 @@ const run = (io) => {
     
             next()
         })
+        
+        socket.on("build:join", () => {
+            const room = getRoom(socket)
+
+            socket.join(room)
+
+            socket.emit("build:logs", store.builds?.[room]?.logs)
+        })
+
     })
 }
 

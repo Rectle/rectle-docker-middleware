@@ -10,15 +10,14 @@ import privateNamespace from "./namespaces/private.js"
 const createSocketServer = async () => {
     const io = new Server(3000, { 
         cors: {
-            origin: ["app.rectle.com", "localhost", "127.0.0.1", "::1"],
-            allowedHeaders: ["x-build", "x-token"],
-            credentials: true
+            origin: "*",
+            allowedHeaders: ["x-build", "x-token", "bypass-tunnel-reminder"]
         },
         
      });
     
     publicNamespace.run(io)
-    privateNamespace.run(io)
+    privateNamespace.run(io, URL)
 }
 
 
