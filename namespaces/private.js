@@ -13,7 +13,9 @@ const run = async (io, runnerUrl) => {
     const nsp = io.of("/private")
 
     nsp.on("connection", (socket, next) => {
+        console.log("Connected")
         socket.use((event, next) => {
+            console.log(socket.handshake.headers)
             if (socket.handshake.headers["x-token"] !== SECRET) {
                 const err = Error("Access denied")
                 err.data = "Invalid or missing token."
@@ -32,6 +34,7 @@ const run = async (io, runnerUrl) => {
         })
         
         socket.on("build:start", () => {
+            console.log('Start')
             const room = getRoom(socket)
 
             socket.join(room)
@@ -47,6 +50,7 @@ const run = async (io, runnerUrl) => {
         })
 
         socket.on("build:log", log => {
+            console.log('Log')
             const room = getRoom(socket)
 
             store.builds[room]?.logs?.push(log)
