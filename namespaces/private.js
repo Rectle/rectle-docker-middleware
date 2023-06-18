@@ -36,9 +36,9 @@ const run = async (io, runnerUrl) => {
             socket.join(room)
             store.builds[room] = { logs: [] }
 
-            // axios.put(`${SERVER_URL}/runner`, {
-            //     url: runnerUrl
-            // })
+            axios.put(`${SERVER_URL}/runner`, {
+                url: runnerUrl
+            })
         })
 
         socket.on("build:log", log => {
@@ -54,9 +54,9 @@ const run = async (io, runnerUrl) => {
 
             socket.leave(room)
             
-            // axios.put(`${SERVER_URL}/logs`, {
-            //     logs: store.builds[room].logs
-            // })
+            axios.put(`${SERVER_URL}/logs`, {
+                logs: store.builds[room].logs
+            })
 
             delete store.builds[room]
             io.of("/").to(room).emit("build:finish")
