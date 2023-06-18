@@ -8,7 +8,7 @@ console.log(SECRET)
 const socket = io("ws://localhost:3000/private", {
   reconnectionDelayMax: 10000,
   extraHeaders: {
-    'X-Build': 2,
+    'X-Build': 99999,
     'X-Token': SECRET
   }
 });

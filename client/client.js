@@ -4,7 +4,7 @@ import io from "socket.io-client"
 const socket = io("ws://localhost:3000/", {
   reconnectionDelayMax: 10000,
   extraHeaders: {
-    'X-Build': 14
+    'X-Build': 9999
   }
 });
 

@@ -5,6 +5,7 @@ import { getRoom, buildValidate } from "./helpers/build.js"
 
 // TODO: Move to env
 const SERVER_URL = 'https://rectle-service-wxvnwxzk5a-lm.a.run.app/api/v1/compilations'
+const TOKEN = 'TOKEN_HERE'
 
 const run = async (io, runnerUrl) => {
     console.info("Secret namespace starting...")
@@ -36,8 +37,12 @@ const run = async (io, runnerUrl) => {
             socket.join(room)
             store.builds[room] = { logs: [] }
 
-            axios.put(`${SERVER_URL}/runner`, {
+            axios.put(`${SERVER_URL}/${room}/runner`, {
                 url: runnerUrl
+            }, {
+                headers: {
+                    'X-Authorization': TOKEN
+                }
             })
         })
 
@@ -54,8 +59,12 @@ const run = async (io, runnerUrl) => {
 
             socket.leave(room)
             
-            axios.put(`${SERVER_URL}/logs`, {
+            axios.put(`${SERVER_URL}/${room}/logs`, {
                 logs: store.builds[room].logs
+            }, {
+                headers: {
+                    'X-Authorization': TOKEN
+                }
             })
 
             delete store.builds[room]
