@@ -40,7 +40,7 @@ const run = async (io, runnerUrl) => {
             socket.join(room)
             store.builds[room] = { logs: [] }
 
-            axios.put(`${SERVER_URL}/${room}/runner`, {
+            axios.post(`${SERVER_URL}/${room}/runner`, {
                 url: runnerUrl
             }, {
                 headers: {
@@ -62,7 +62,7 @@ const run = async (io, runnerUrl) => {
 
             socket.leave(room)
             
-            axios.put(`${SERVER_URL}/${room}/logs`, {
+            axios.post(`${SERVER_URL}/${room}/logs`, {
                 logs: store.builds[room].logs
             }, {
                 headers: {
