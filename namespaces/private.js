@@ -74,6 +74,16 @@ const run = async (io, runnerUrl) => {
             io.of("/").to(room).emit("build:finish")
         })
 
+        socket.on("build:result", result => {
+            axios.post(`${SERVER_URL}/${room}/score`, {
+                score: result
+            }, {
+                headers: {
+                    'X-Authorization': TOKEN
+                }
+            }).catch(err => console.error(err))
+        })
+
         socket.on("disconnect", reason => {
             console.info("Disconnected:", reason)
         })
